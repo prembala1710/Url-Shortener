@@ -28,6 +28,17 @@ app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
 
+app.get('/api/shortcut/:url' , function(req,res) {
+  console.log(req.params.url);
+  var recvURL = URLModel.findOne({"short_url" : req.params.url}, function(err,data) {
+    if(err)
+    {
+      res.json({"error":"invalid url" + err});
+    }
+  res.redirect(data.original_url);
+  });
+});
+
 app.route('/api/shorturl').post(function(req,res) {
   try { 
     url = new URL(req.body.url);
@@ -44,14 +55,8 @@ app.route('/api/shorturl').post(function(req,res) {
       res.json({"error":"invalid url"});
     }
   } catch (error) {
-    res.json({"error":"Error Occured : " + error});
+    res.json({"error":"invalid url"});
   }
-});
-app.get('/api/shortcut/:url' , function (req,res) {
-  URLModel.findOne({"short_url" : req.params.url}, function(err,data) {
-    if(err) res.json({"error":"Invalid url"});
-    res.json({"original_url" : data.original_url , "short_url" : data.short_url});
-  });
 });
 
 app.listen(port, function() {
