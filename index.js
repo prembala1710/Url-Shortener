@@ -28,12 +28,12 @@ app.get('/api/hello', function(req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-app.get('/api/shortcut/:url' , function(req,res) {
+app.get('/api/shorturl/:url' , function(req,res) {
   console.log(req.params.url);
-  var recvURL = URLModel.findOne({"short_url" : req.params.url}, function(err,data) {
+  URLModel.findOne({"short_url" : req.params.url}, function(err,data) {
     if(err)
     {
-      res.json({"error":"invalid url" + err});
+      res.json({"error":"invalid url"});
     }
   res.redirect(data.original_url);
   });
